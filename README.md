@@ -96,7 +96,7 @@ Describe blocks are matched by the names Vitest gives them, so `describe(example
 
 ### Configuration
 
-Tests run through the Vitest instance of `<root>`, with its configuration: its `include` and `exclude` choose the test files, and its `coverage.include` and `coverage.exclude` choose the source files to check. `coverage.include` is required. The checks use their own coverage reports directory and ignore `coverage.thresholds`.
+Tests run with the Vitest installed in `<root>`, which must satisfy the supported range of the `vitest` peer dependency, and with its configuration: its `include` and `exclude` choose the test files, and its `coverage.include` and `coverage.exclude` choose the source files to check. `coverage.include` is required. The checks use their own coverage reports directory and ignore `coverage.thresholds`.
 
 ## Contributing
 

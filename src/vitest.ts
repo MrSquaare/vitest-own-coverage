@@ -1,6 +1,14 @@
 import type { ViteUserConfig } from "vitest/config";
 import type { CliOptions, VitestPluginContext } from "vitest/node";
 
+import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+import { satisfies } from "semver";
+import * as z from "zod";
+
+import packageJson from "../package.json" with { type: "json" };
 import * as thisMod from "./vitest.ts";
 
 export type VitestTestResult = {
@@ -73,6 +81,13 @@ export type StartVitestParams = {
 export type CoverageConfig = VitestPluginContext["vitest"]["config"]["coverage"];
 
 const PLUGIN_NAME = "vitest-own-coverage";
+const PROJECT_PACKAGE_JSON_FILE = "package.json";
+const VITEST_PACKAGE_JSON_SPECIFIER = "vitest/package.json";
+const VITEST_NODE_SPECIFIER = "vitest/node";
+
+const vitestPackageJsonSchema = z.object({
+  version: z.string(),
+});
 
 export const overrideCoverageConfig = (
   coverage: CoverageConfig,
@@ -104,4 +119,63 @@ export const startVitest = async (
     { root: params.root, watch: false, reporters: [{ onCoverage: params.onCoverage }] },
     thisMod.createViteOverrides(params.reportsDirectory),
   );
+};
+
+export const resolveProjectModule = (root: string, specifier: string): string => {
+  try {
+    return createRequire(join(root, PROJECT_PACKAGE_JSON_FILE)).resolve(specifier);
+  } catch (error) {
+    throw new Error(
+      `Failed to check ${root}: ${specifier} cannot be resolved from it. Install Vitest in the project.`,
+      { cause: error },
+    );
+  }
+};
+
+export const readVitestVersion = async (root: string): Promise<string> => {
+  const path = thisMod.resolveProjectModule(root, VITEST_PACKAGE_JSON_SPECIFIER);
+  const content = await readFile(path, "utf8");
+
+  return vitestPackageJsonSchema.parse(JSON.parse(content)).version;
+};
+
+export const assertSupportedVitestVersion = (root: string, version: string): void => {
+  const supportedRange = packageJson.peerDependencies.vitest;
+
+  if (!satisfies(version, supportedRange)) {
+    throw new Error(
+      `Failed to check ${root}: it uses Vitest ${version}, but vitest-own-coverage supports Vitest ${supportedRange}. Install a supported Vitest version in the project.`,
+    );
+  }
+};
+
+export const importModule = async (path: string): Promise<unknown> => {
+  return import(pathToFileURL(path).href);
+};
+
+export const hasCreateVitest = (
+  module: unknown,
+): module is { readonly createVitest: CreateVitest } => {
+  return (
+    typeof module === "object" &&
+    module !== null &&
+    "createVitest" in module &&
+    typeof module.createVitest === "function"
+  );
+};
+
+export const loadCreateVitest = async (root: string): Promise<CreateVitest> => {
+  thisMod.assertSupportedVitestVersion(root, await thisMod.readVitestVersion(root));
+
+  const module = await thisMod.importModule(
+    thisMod.resolveProjectModule(root, VITEST_NODE_SPECIFIER),
+  );
+
+  if (!thisMod.hasCreateVitest(module)) {
+    throw new Error(
+      `Failed to check ${root}: its ${VITEST_NODE_SPECIFIER} module exports no createVitest function.`,
+    );
+  }
+
+  return module.createVitest;
 };

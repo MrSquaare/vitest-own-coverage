@@ -1,13 +1,13 @@
 import { mockedMkdtemp, mockedRm } from "./test/mocks/node-fs-promises.mock.ts";
-import { mockedStartVitest } from "./vitest.mock.ts";
+import { mockedLoadCreateVitest, mockedStartVitest } from "./vitest.mock.ts";
 
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createVitest } from "vitest/node";
 
 import type { CoverageCollector, SpecificationsRun } from "./runner.ts";
 import type {
+  CreateVitest,
   VitestCollection,
   VitestInstance,
   VitestModule,
@@ -432,6 +432,7 @@ describe("toTestFileRun", () => {
 });
 
 describe("createTestRunner", () => {
+  const createVitest = vi.fn<CreateVitest>();
   const createCoverageCollectorSpy = vi.spyOn(thisMod, "createCoverageCollector");
   const indexSpecificationsSpy = vi.spyOn(thisMod, "indexSpecifications");
   const getSpecificationSpy = vi.spyOn(thisMod, "getSpecification");
@@ -460,6 +461,7 @@ describe("createTestRunner", () => {
     };
 
     mockedMkdtemp.mockResolvedValueOnce(REPORTS_DIRECTORY);
+    mockedLoadCreateVitest.mockResolvedValueOnce(createVitest);
     mockedStartVitest.mockResolvedValueOnce(vitest);
 
     const runner = await createTestRunner(ROOT);
@@ -469,6 +471,8 @@ describe("createTestRunner", () => {
     expect(mockedMkdtemp).toHaveBeenCalledTimes(1);
     expect(mockedMkdtemp).toHaveBeenNthCalledWith(1, join(tmpdir(), "vitest-own-coverage-"));
     expect(mockedStartVitest).toHaveBeenCalledTimes(1);
+    expect(mockedLoadCreateVitest).toHaveBeenCalledTimes(1);
+    expect(mockedLoadCreateVitest).toHaveBeenNthCalledWith(1, ROOT);
     expect(mockedStartVitest).toHaveBeenNthCalledWith(1, createVitest, {
       root: ROOT,
       reportsDirectory: REPORTS_DIRECTORY,
@@ -494,6 +498,7 @@ describe("createTestRunner", () => {
     const coverage = { [`${ROOT}/src/example.ts`]: createFileCoverage() };
 
     mockedMkdtemp.mockResolvedValueOnce(REPORTS_DIRECTORY);
+    mockedLoadCreateVitest.mockResolvedValueOnce(createVitest);
     mockedStartVitest.mockResolvedValueOnce(vitest);
     runSpecificationsSpy.mockResolvedValueOnce({ testModules: [], coverage });
 
@@ -529,6 +534,7 @@ describe("createTestRunner", () => {
     const testFileRun = createTestFileRun();
 
     mockedMkdtemp.mockResolvedValueOnce(REPORTS_DIRECTORY);
+    mockedLoadCreateVitest.mockResolvedValueOnce(createVitest);
     mockedStartVitest.mockResolvedValueOnce(vitest);
     getSpecificationSpy.mockReturnValueOnce(filteredSpecification);
     runSpecificationsSpy.mockResolvedValueOnce(run);
@@ -572,6 +578,7 @@ describe("createTestRunner", () => {
     };
 
     mockedMkdtemp.mockResolvedValueOnce(REPORTS_DIRECTORY);
+    mockedLoadCreateVitest.mockResolvedValueOnce(createVitest);
     mockedStartVitest.mockResolvedValueOnce(vitest);
     mockedRm.mockResolvedValueOnce(undefined);
 
@@ -602,6 +609,7 @@ describe("createTestRunner", () => {
     };
 
     mockedMkdtemp.mockResolvedValueOnce(REPORTS_DIRECTORY);
+    mockedLoadCreateVitest.mockResolvedValueOnce(createVitest);
     mockedStartVitest.mockResolvedValueOnce(vitest);
     mockedRm.mockResolvedValueOnce(undefined);
 

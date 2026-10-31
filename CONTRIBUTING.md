@@ -25,6 +25,7 @@ Read the [Guidelines](GUIDELINES.md) before opening an issue or a pull request.
 
 ```shell
 git clone https://github.com/MrSquaare/vitest-own-coverage.git
+cd vitest-own-coverage
 ```
 
 2. Install the dependencies:

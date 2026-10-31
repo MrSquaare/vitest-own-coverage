@@ -1,7 +1,6 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { createVitest } from "vitest/node";
 
 import type { CoverageReport, TestFailure, TestFileRun, TestSuiteNode } from "./types.ts";
 import type {
@@ -13,7 +12,7 @@ import type {
 
 import * as thisMod from "./runner.ts";
 import { coverageReportSchema } from "./types.ts";
-import { startVitest } from "./vitest.ts";
+import { loadCreateVitest, startVitest } from "./vitest.ts";
 
 export interface CoverageCollector {
   collect(coverage: unknown): void;
@@ -176,7 +175,7 @@ export const createTestRunner = async (root: string): Promise<TestRunner> => {
   resources.defer(() => rm(reportsDirectory, { recursive: true, force: true }));
 
   const collector = thisMod.createCoverageCollector();
-  const vitest = await startVitest(createVitest, {
+  const vitest = await startVitest(await loadCreateVitest(root), {
     root,
     reportsDirectory,
     onCoverage: collector.collect,

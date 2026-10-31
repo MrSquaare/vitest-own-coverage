@@ -1,5 +1,8 @@
 # Node.js
 node_modules/
+!e2e/fixtures/*/node_modules/
+e2e/fixtures/*/node_modules/*
+!e2e/fixtures/*/node_modules/vitest/
 
 # Build & test outputs
 dist/
