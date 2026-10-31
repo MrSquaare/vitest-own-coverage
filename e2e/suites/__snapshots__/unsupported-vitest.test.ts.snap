@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`unsupported-vitest > should fail when the Vitest of the project is not supported 1`] = `
+{
+  "message": "Error: Failed to check <workspace>: it uses Vitest 4.0.0, but vitest-own-coverage supports Vitest ^5.0. Install a supported Vitest version in the project.",
+  "stdout": "",
+}
+`;

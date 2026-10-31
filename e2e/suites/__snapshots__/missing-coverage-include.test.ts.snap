@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`missing-coverage-include > should fail when coverage.include is not set 1`] = `
+{
+  "message": "Error: Failed to check <workspace>: coverage.include is not set in its Vitest config. Set it to the source files that must be tested.",
+  "stdout": "",
+}
+`;

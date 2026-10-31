@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`covered > should pass every check 1`] = `
+"✅ src/math.test.ts → src/math.ts
+   ✅ describe("double") (lines 7-9)
+   ✅ describe("half") (lines 11-17)
+   ✅ describe("Counter") > describe("increment") (lines 22-24)
+
+All 4 checks pass.
+"
+`;

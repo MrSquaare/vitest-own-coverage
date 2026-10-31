@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`invalid-vitest > should fail when the Vitest of the project exports no createVitest 1`] = `
+{
+  "message": "Error: Failed to check <workspace>: its vitest/node module exports no createVitest function.",
+  "stdout": "",
+}
+`;
