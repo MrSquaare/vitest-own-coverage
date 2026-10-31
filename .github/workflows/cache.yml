@@ -1,0 +1,30 @@
+name: "Cache Warming"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".nvmrc"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/actions/setup-env/**"
+      - ".github/workflows/cache.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  warm-cache:
+    runs-on: ubuntu-latest
+    name: Warm Cache
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env

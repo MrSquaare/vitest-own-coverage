@@ -1,0 +1,52 @@
+{
+  "name": "vitest-own-coverage",
+  "version": "0.0.0",
+  "description": "Check that each exported function and class method is fully covered by its own Vitest describe block",
+  "license": "MIT",
+  "bin": {
+    "vitest-own-coverage": "./dist/bin.mjs",
+    "voc": "./dist/bin.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "tsdown",
+    "test": "vitest run",
+    "test:e2e": "pnpm run build && vitest run --root e2e",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "check": "pnpm run fmt:check && pnpm run lint",
+    "check:fix": "pnpm run fmt && pnpm run lint:fix",
+    "coverage:check": "node src/bin.ts ."
+  },
+  "dependencies": {
+    "citty": "^0.2.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "^5.0.5",
+    "eslint-plugin-perfectionist": "^5.13.0",
+    "oxfmt": "^0.75.0",
+    "oxlint": "^1.90.0",
+    "tsdown": "^0.23.4",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "peerDependencies": {
+    "@vitest/coverage-v8": "^5.0.5",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": ">=24.8.0"
+  },
+  "packageManager": "pnpm@12.16.1"
+}

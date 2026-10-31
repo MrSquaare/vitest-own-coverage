@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+
+# Build & test outputs
+dist/
+coverage/
+e2e/.workspaces/
+
+# Logs
+*.log
+
+# Environment
+.env*
+!.env.example
+
+# Editors & IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
