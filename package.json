@@ -26,21 +26,21 @@
   },
   "dependencies": {
     "citty": "^0.2.2",
-    "semver": "^7.8.5",
+    "semver": "^7.8.6",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^5.10.0",
+    "@stylistic/eslint-plugin": "^6.0.1",
     "@types/node": "^26.6.6",
     "@types/semver": "^7.8.0",
-    "@vitest/coverage-v8": "^5.0.5",
-    "eslint-plugin-perfectionist": "^5.13.0",
-    "oxfmt": "^0.75.0",
-    "oxlint": "^1.90.0",
-    "tsdown": "^0.23.4",
-    "typescript": "~6.0.3",
-    "vite": "^8.3.5",
-    "vitest": "^5.0.5"
+    "@vitest/coverage-v8": "^5.1.1",
+    "eslint-plugin-perfectionist": "^5.14.0",
+    "oxfmt": "^0.79.0",
+    "oxlint": "^1.94.0",
+    "tsdown": "^0.23.7",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
   },
   "peerDependencies": {
     "@vitest/coverage-v8": "^5.0",
